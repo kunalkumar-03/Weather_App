@@ -1,2 +1,68 @@
-# Weather_App
-modern and responsive Weather Application built using HTML, CSS, and JavaScript that provides real-time weather updates, air quality information, and a 5-day forecast for any city. The project features a clean UI and seamless API integration to deliver an interactive and user-friendly weather experience across desktop and mobile devices.
+# 🌦️ Weather App
+
+A simple and responsive Weather App built using HTML, CSS, and JavaScript.  
+The application provides real-time weather information, air quality details, and weather forecasts for any city.
+
+---
+
+## 🚀 Features
+
+- Search weather by city name
+- Display current temperature
+- Show weather conditions
+- Display humidity information
+- Show wind speed
+- Display atmospheric pressure
+- Air quality information (PM2.5)
+- 5-Day weather forecast
+- Responsive glassmorphism UI design
+
+---
+
+## 📂 Files
+
+### 1. WeatherApp.html
+Contains:
+- Complete UI structure
+- Styling using CSS
+- Weather cards and forecast section
+- Search input and button
+
+### 2. WeatherApp.js
+Handles:
+- API requests
+- Fetching weather data
+- Fetching air quality data
+- Updating weather information dynamically
+- Search functionality
+
+---
+
+## 🛠️ Technologies Used
+
+- HTML5
+- CSS3
+- JavaScript
+- OpenWeather API
+
+---
+
+## 📱 Responsive Design
+
+The application is optimized for:
+- Desktop
+- Tablet
+- Mobile devices
+
+---
+
+# 🚀 Future Enhancements
+
+- Live hourly forecast
+- Dark & light theme toggle
+- Current location weather detection
+- Animated weather backgrounds
+- Multiple city support
+- Weather map integration
+
+---
