@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+
+  <style>
+
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    
+    body{
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      /* Colorful glassmorphism background */
+      background:
+        radial-gradient(circle at top left, #00f5ff, transparent 25%),
+        radial-gradient(circle at top right, #ff00ff, transparent 25%),
+        radial-gradient(circle at bottom left, #00ff99, transparent 25%),
+        radial-gradient(circle at bottom right, #6a5cff, transparent 25%),
+        linear-gradient(135deg, #1d2b64, #d6c4c9);
+
+      background-size: cover;
+      font-family: Arial, sans-serif;
+}
+
+.container{
+  width: 90%;
+  max-width: 900px;
+
+  /* Glass effect */
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 25px;
+
+  box-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.37),
+    inset 0 0 10px rgba(255,255,255,0.15);
+
+  overflow: hidden;
+  padding: 20px;
+}
+
+    /* Header */
+
+    .header{
+      background: linear-gradient(to bottom right, #3498db, #2c3e50);
+      color: white;
+      text-align: center;
+      padding: 24px 32px;
+      border-radius: 25px;
+    }
+
+    .header h3{
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .header p{
+      font-size: 16px;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+
+    .search-box{
+      max-width: 520px;
+      margin: auto;
+      display: flex;
+    }
+
+    .search-box input{
+      flex: 1;
+      height: 50px;
+      border: none;
+      outline: none;
+      background: white;
+      padding: 0 20px;
+      border-radius: 50px 0 0 50px;
+      font-size: 16px;
+      color: #444;
+    }
+
+    .search-box input::placeholder{
+      color: black;
+    }
+
+    .search-box button{
+      padding: 0 24px;
+      border: none;
+      background: #1c2e40;
+      color: white;
+      border-radius: 0 50px 50px 0;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 14px;
+    }
+
+    .search-box button:hover{
+      background: #3d5166;
+    }
+
+    /* Main Layout */
+
+    .main{
+      display: grid;
+      grid-template-columns: 1.6fr 1.4fr;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    /* Weather Panel */
+
+    .weather-panel{
+      background: linear-gradient(to bottom right, #2674a8, #1b5a85);
+      color: white;
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .weather-top{
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    /* MAIN WEATHER IMAGE */
+
+    .weather-top img{
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .temp{
+      font-size: 64px;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .city{
+      font-size: 28px;
+      font-weight: 500;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+
+    .weather-status{
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    /* Weather Bottom */
+
+    .weather-info{
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid rgba(255,255,255,0.3);
+      padding-top: 16px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .info-box{
+      text-align: center;
+      min-width: 60px;
+    }
+
+    .info-box h4{
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .info-box p{
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    /* Right Panel */
+
+    .right-panel{
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card{
+      background: white;
+      border-left: 4px solid #3498db;
+      border-radius: 0 18px 18px 0;
+      padding: 16px 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .card h2{
+      font-size: 17px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    /* Air Quality */
+
+    .quality{
+      font-size: 30px;
+      font-weight: bold;
+      color: #27ae60;
+    }
+
+    .pm{
+      font-size: 14px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* Forecast */
+
+    .forecast{
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 6px;
+    }
+
+    .forecast-item{
+      flex: 1;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .forecast-item p{
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .forecast-item img{
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      margin-bottom: 4px;
+    }
+
+    .forecast-item h4{
+      font-size: 14px;
+      color: #444;
+      font-weight: 500;
+    }
+
+    /* Responsive */
+
+    @media(max-width: 768px){
+
+      .main{
+        grid-template-columns: 1fr;
+      }
+
+      .header{
+        padding: 24px 18px;
+      }
+
+      .header h3{
+        font-size: 26px;
+      }
+
+      .header p{
+        font-size: 14px;
+      }
+
+      .weather-top img{
+        width: 110px;
+        height: 110px;
+      }
+
+      .temp{
+        font-size: 50px;
+      }
+
+      .city{
+        font-size: 22px;
+      }
+
+      .forecast-item img{
+        width: 35px;
+        height: 35px;
+      }
+
+      .forecast-item h4{
+        font-size: 12px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Header -->
+
+    <div class="header">
+
+      <h3>Weather App</h3>
+
+      <p>Current weather condition and air quality information</p>
+
+      <div class="search-box">
+
+        <input
+          type="text"
+          placeholder="Enter Your City..."
+          id="searchbox"
+        />
+
+        <button onclick="handleSearch()">
+          Search
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Main -->
+
+    <div class="main">
+
+      <!-- Left Weather Panel -->
+
+      <div class="weather-panel">
+
+        <div class="weather-top">
+
+          <!-- MAIN WEATHER IMAGE -->
+
+          <img src="https://openweathermap.org/img/wn/10d@4x.png" alt="Weather" id="weatherimg"/>
+
+          <div>
+
+            <div class="temp" id="temp">--°C</div>
+
+            <div class="city" id="cityName"> ---</div>
+
+            <div class="weather-status" id="weather">--</div>
+
+          </div>
+
+        </div>
+
+        <!-- WEATHER INFO -->
+
+        <div class="weather-info">
+
+          <div class="info-box">
+            <h4><span id="humidity">--</span>%</h4>
+            <p>Humidity</p>
+          </div>
+
+          <div class="info-box">
+            <h4><span id="wind">--</span> km/h</h4>
+            <p>Wind Speed</p>
+          </div>
+
+          <div class="info-box">
+            <h4><span id="pressure">--</span> hPa</h4>
+            <p>Pressure</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Right Panel -->
+
+      <div class="right-panel">
+
+        <!-- Air Quality -->
+
+        <div class="card">
+
+          <h2>Air Quality</h2>
+
+          <div class="quality" id="quality">--</div>
+
+          <div class="pm">
+            PM2.5: <span id="pm">--</span> μg/m³
+          </div>
+
+        </div>
+
+        <!-- Forecast -->
+
+        <div class="card">
+
+          <h2>5-Day Forecast</h2>
+
+          <div class="forecast">
+
+            <!-- Monday -->
+
+            <div class="forecast-item">
+              <p>Mon</p>
+              <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="">
+              <h4>24°C</h4>
+            </div>
+
+            <!-- Tuesday -->
+
+            <div class="forecast-item">
+              <p>Tue</p>
+              <img src="https://cdn-icons-png.flaticon.com/512/1146/1146869.png" alt="">
+              <h4>22°C</h4>
+            </div>
+
+            <!-- Wednesday -->
+
+            <div class="forecast-item">
+              <p>Wed</p>
+              <img src="https://cdn-icons-png.flaticon.com/512/1146/1146860.png" alt="">
+              <h4>19°C</h4>
+            </div>
+
+            <!-- Thursday -->
+
+            <div class="forecast-item">
+              <p>Thu</p>
+              <img src="https://cdn-icons-png.flaticon.com/512/3351/3351979.png" alt="">
+              <h4>17°C</h4>
+            </div>
+
+            <!-- Friday -->
+
+            <div class="forecast-item">
+              <p>Fri</p>
+              <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="">
+              <h4>21°C</h4>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="WeatherApp.js"></script>
+
+</body>
+</html>
