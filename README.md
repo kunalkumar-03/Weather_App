@@ -3,6 +3,7 @@
 A simple and responsive Weather App built using HTML, CSS, and JavaScript.  
 The application provides real-time weather information, air quality details, and weather forecasts for any city.
 
+live url :-https://weather-app036.netlify.app/
 ---
 
 ## 🚀 Features
